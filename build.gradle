@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+version '1.0'
+
+sourceCompatibility = 1.8
+mainClassName = 'com.timic.excel2sql.Main'
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation 'org.apache.poi:poi-ooxml:3.17'
+}
+
+compileJava.options.encoding = 'UTF-8'
