@@ -1,9 +1,12 @@
 package com.timic.excel2sql;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -21,9 +24,13 @@ import com.timic.excel2sql.components.Table;
 public class Main {
 
 	public static void main(String[] args) {
+		if (args.length < 1) {
+			System.err.println("Argument for path to Excel not found.");
+			System.exit(0);
+		}
 		InputStream excelFile;
 		try {
-			excelFile = new FileInputStream("E:\\School\\L4\\NRP\\test.xlsx");
+			excelFile = new FileInputStream(args[0]);
 			Workbook excel = new XSSFWorkbook(excelFile);
 			ArrayList<Table> tables = new ArrayList<Table>();
 
@@ -91,6 +98,14 @@ public class Main {
 			excel.close();
 			
 			// Generate SQL code
+			String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+			String decodedPath = URLDecoder.decode(path.substring(1, path.lastIndexOf("/") + 1), "UTF-8");
+			
+			File outFile = new File(decodedPath + args[0].substring(0, args[0].lastIndexOf(".")) + ".sql");
+			System.out.println("SQL code extracted to " + decodedPath + args[0].substring(0, args[0].lastIndexOf(".")) + ".sql");
+			outFile.createNewFile();
+			PrintWriter writer = new PrintWriter(outFile);
+			
 			for (int tableIndex = 0; tableIndex < tables.size(); tableIndex++) {
 				Table table = tables.get(tableIndex);
 				String tableQuery = "";
@@ -108,10 +123,10 @@ public class Main {
 					}
 				}
 				tableQuery += "\n);";
-				System.out.println(tableQuery);
+				writer.println(tableQuery);
 				
 				
-				System.out.println();
+				writer.println();
 				
 				for (int rowIndex = 0; rowIndex < table.rows.size(); rowIndex++) {
 					String insertQuery = "INSERT INTO " + table.getName() + "\n(";
@@ -139,18 +154,21 @@ public class Main {
 						}
 					}
 					insertQuery += ");";
-					System.out.println(insertQuery);
-					System.out.println();
+					writer.println(insertQuery);
+					writer.println();
 				}
 				
-				System.out.println();
-				System.out.println();
-				System.out.println();
+				writer.println();
+				writer.println();
+				writer.println();
 			}
+			
+			writer.flush();
+			writer.close();
 		} catch (FileNotFoundException e) {
-			System.err.println("File not found");
+			System.err.println("File not found.");
 		} catch (IOException e) {
-			System.err.println("Unknown IO error");
+			System.err.println("Unknown IO error.");
 		}
 	}
 

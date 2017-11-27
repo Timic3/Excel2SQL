@@ -14,4 +14,12 @@ dependencies {
 	implementation 'org.apache.poi:poi-ooxml:3.17'
 }
 
+jar {
+	manifest {
+		attributes (
+			'Main-Class': mainClassName
+		)
+	}
+}
+
 compileJava.options.encoding = 'UTF-8'
