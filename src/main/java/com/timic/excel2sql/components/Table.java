@@ -14,7 +14,7 @@ public class Table {
 	public void addColumn(String columnName, String columnType) {
 		ColumnType columnTypeEnum = ColumnType.VARCHAR;
 		if (columnType.equals("NUMERIC")) {
-			columnTypeEnum = ColumnType.NUMERIC;
+			columnTypeEnum = ColumnType.NUMBER;
 		} else if(columnType.equals("DATE")) {
 			columnTypeEnum = ColumnType.DATE;
 		}

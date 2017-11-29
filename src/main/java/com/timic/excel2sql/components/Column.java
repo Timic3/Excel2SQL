@@ -22,6 +22,10 @@ public class Column {
 	}
 	
 	public boolean isNumeric() {
-		return type == ColumnType.NUMERIC;
+		return type == ColumnType.NUMBER;
+	}
+	
+	public boolean isDate() {
+		return type == ColumnType.DATE;
 	}
 }

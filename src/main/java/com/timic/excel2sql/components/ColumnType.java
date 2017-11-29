@@ -2,7 +2,7 @@ package com.timic.excel2sql.components;
 
 public enum ColumnType {
 	VARCHAR("VARCHAR2", 32),
-	NUMERIC("NUMERIC", 15),
+	NUMBER("NUMBER", 15),
 	DATE("DATE");
 	
 	private final String oracleType;

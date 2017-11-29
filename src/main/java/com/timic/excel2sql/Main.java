@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -22,7 +25,6 @@ import com.timic.excel2sql.components.Data;
 import com.timic.excel2sql.components.Table;
 
 public class Main {
-
 	public static void main(String[] args) {
 		if (args.length < 1) {
 			System.err.println("Argument for path to Excel not found.");
@@ -105,6 +107,7 @@ public class Main {
 			System.out.println("SQL code extracted to " + decodedPath + args[0].substring(0, args[0].lastIndexOf(".")) + ".sql");
 			outFile.createNewFile();
 			PrintWriter writer = new PrintWriter(outFile);
+			writer.write(new char[0]);
 			
 			for (int tableIndex = 0; tableIndex < tables.size(); tableIndex++) {
 				Table table = tables.get(tableIndex);
@@ -146,6 +149,10 @@ public class Main {
 						
 						if (table.columns.get(dataIndex).isNumeric()) {
 							insertQuery += rowData;
+						} else if (table.columns.get(dataIndex).isDate()) {
+							Date date = DateUtil.getJavaDate(Double.valueOf(rowData));
+							String formattedDate = new SimpleDateFormat("dd.MM.yyyy").format(date);
+							insertQuery += "TO_DATE('" + formattedDate + "', 'dd.MM.yyyy')";
 						} else {
 							insertQuery += "'" + rowData + "'";
 						}
