@@ -107,7 +107,6 @@ public class Main {
 			System.out.println("SQL code extracted to " + decodedPath + args[0].substring(0, args[0].lastIndexOf(".")) + ".sql");
 			outFile.createNewFile();
 			PrintWriter writer = new PrintWriter(outFile);
-			writer.write(new char[0]);
 			
 			for (int tableIndex = 0; tableIndex < tables.size(); tableIndex++) {
 				Table table = tables.get(tableIndex);
